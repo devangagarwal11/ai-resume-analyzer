@@ -13,7 +13,7 @@ const Home = () => {
 
 
     const handleGenerateReport=async()=>{
-        console.log(resumeInputRef.current.files)
+        // console.log(resumeInputRef.current.files)
         const resumeFile=resumeInputRef.current.files[0]
         const data=await generateReport({jobDescription,selfDescription,resumeFile})
         navigate(`/interview/${data._id}`)
