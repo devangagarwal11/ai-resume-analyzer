@@ -1,15 +1,47 @@
-import axios from "axios";
+import axios, { formToJSON } from "axios";
 
 const api=axios.create({
     baseURL: "http://localhost:8000",
     withCredentials: true,
 })
 
-export async function register ({username,email,password}) {
+export async function generateInterviewReport ({jobDescription,selfDescription,resumeFile}) {
     try {
-        const response=await api.post("/api/auth/register",{username,email,password})
+        const formData= new FormData()
+        formData.append("jobDescription",jobDescription)
+        formData.append("selfDescription",selfDescription)
+        formData.append("resume",resumeFile)
+
+        const response=await api.post("/api/interview/",formData,{
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        })
+
         return response.data
     } catch (error) {
-        console.log("Register route:" +error)
+        console.log("generateInterviewReport route:" +error)
+    }
+}
+
+export async function getInterviewReportById (interviewId) {
+    try {
+
+        const response=await api.get(`/api/interview/report/${interviewId}`)
+
+        return response.data
+    } catch (error) {
+        console.log("getInterviewReportById route:" +error)
+    }
+}
+
+export async function getAllInterviewReports () {
+    try {
+
+        const response=await api.get(`/api/interview/`)
+
+        return response.data
+    } catch (error) {
+        console.log("getAllInterviewReports route:" +error)
     }
 }

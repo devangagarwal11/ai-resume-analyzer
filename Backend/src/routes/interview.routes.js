@@ -9,6 +9,6 @@ interviewRouter.post("/",authUser,upload.single("resume"),generateInterviewRepor
 
 interviewRouter.get("/report/:interviewId",authUser,getInterviewReportController)
 
-interviewRouter.get("/report/:interviewId",authUser,getInterviewReportOfLoginUserController)
+interviewRouter.get("/",authUser,getInterviewReportOfLoginUserController)
 
 module.exports=interviewRouter

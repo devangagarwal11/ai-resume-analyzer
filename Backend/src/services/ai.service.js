@@ -63,7 +63,9 @@
 const { GoogleGenAI, Type } = require("@google/genai");
 const { z } = require("zod");
 
-const ai = new GoogleGenAI({apiKey: process.env.GOOGLE_GEMINI_API_KEY});
+console.log(process.env.GOOGLE_GEMINI_API_KEY)
+const ai = new GoogleGenAI({apiKey: "AIzaSyD9MbzWBvIkKz-F4gDzLQUmEQzgCv6kB3E"});
+
 
 // 1. Keep your Zod schema for runtime validation before saving to your DB
 const interviewReportSchema = z.object({

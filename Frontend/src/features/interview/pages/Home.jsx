@@ -1,7 +1,33 @@
-import React from 'react'
+import React,{useState,useRef} from 'react'
 import "../styles/home.scss"
+import {useInteriew} from "../hooks/useInterview"
+import {useNavigate} from "react-router"
 
 const Home = () => {
+    const {loading,generateReport,reports}=useInteriew()
+
+    const [jobDescription,setJobDescription]=useState("")
+    const [selfDescription,setSelfDescription]=useState("")
+    const resumeInputRef=useRef()
+    const navigate=useNavigate()
+
+
+    const handleGenerateReport=async()=>{
+        console.log(resumeInputRef.current.files)
+        const resumeFile=resumeInputRef.current.files[0]
+        const data=await generateReport({jobDescription,selfDescription,resumeFile})
+        navigate(`/interview/${data._id}`)
+
+    }
+
+
+    if(loading){
+        return (<main>
+            <h1>Loading your interview plan....</h1>
+        </main>)
+    }
+
+
   return (
         <div className='home-page'>
 
@@ -25,6 +51,8 @@ const Home = () => {
                             <span className='badge badge--required'>Required</span>
                         </div>
                         <textarea
+                        value={jobDescription}
+                        onChange={(e)=>{setJobDescription(e.target.value)}}
                             className='panel__textarea'
                             placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'`}
                             maxLength={5000}
@@ -56,7 +84,7 @@ const Home = () => {
                                 </span>
                                 <p className='dropzone__title'>Click to upload or drag &amp; drop</p>
                                 <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
-                                <input hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
+                                <input ref={resumeInputRef} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
                             </label>
                         </div>
 
@@ -67,6 +95,8 @@ const Home = () => {
                         <div className='self-description'>
                             <label className='section-label' htmlFor='selfDescription'>Quick Self-Description</label>
                             <textarea
+                            value={selfDescription}
+                            onChange={(e)=>{setSelfDescription(e.target.value)}}
                                 id='selfDescription'
                                 name='selfDescription'
                                 className='panel__textarea panel__textarea--short'
@@ -88,6 +118,7 @@ const Home = () => {
                 <div className='interview-card__footer'>
                     <span className='footer-info'>AI-Powered Strategy Generation &bull; Approx 30s</span>
                     <button
+                    onClick={handleGenerateReport}
                         className='generate-btn'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" /></svg>
                         Generate My Interview Strategy
@@ -95,7 +126,7 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* Recent Reports List
+            Recent Reports List
             {reports.length > 0 && (
                 <section className='recent-reports'>
                     <h2>My Recent Interview Plans</h2>
@@ -109,7 +140,7 @@ const Home = () => {
                         ))}
                     </ul>
                 </section>
-            )} */}
+            )}
 
             {/* Page Footer */}
             <footer className='page-footer'>
